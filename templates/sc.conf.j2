@@ -1,0 +1,10 @@
+description "Sauce Connect"
+
+start on (local-filesystems and net-device-up IFACE!=lo)
+stop on shutdown
+
+respawn
+setuid sc
+chdir /var/lib/sc
+
+exec /opt/sc-{{ sc_version }}-{{ sc_os }}/bin/sc -u {{ sc_username }} -k {{ sc_access_key }} -v >> {{ sc_log }} 2>&1

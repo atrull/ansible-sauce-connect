@@ -1,0 +1,9 @@
+---
+sc_version: "4.3.5"
+sc_os: "linux"
+sc_username: "YOUR_USERNAME"
+sc_access_key: "YOUR_ACCESS_KEY"
+
+sc_log: "/var/log/sc.log"
+sc_log_rotate_count: 5
+sc_log_rotate_interval: daily

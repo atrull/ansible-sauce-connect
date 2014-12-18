@@ -1,0 +1,32 @@
+---
+- name: Download Sauce Connect
+  get_url: url=https://saucelabs.com/downloads/sc-{{ sc_version }}-{{ sc_os }}.tar.gz
+           dest=/usr/local/src/sc-{{ sc_version }}-{{ sc_os }}.tar.gz
+
+- name: Extract and install Sauce Connect
+  unarchive: src=/usr/local/src/sc-{{ sc_version }}-{{ sc_os }}.tar.gz
+             dest=/opt
+             copy=no
+             creates=/usr/local/sc-{{ sc_version }}-{{ sc_os }}
+
+- name: Create service account for Sauce Connect
+  user: name=sc
+        system=yes
+        home=/var/lib/sc
+        shell=/bin/false
+        state=present
+
+- name: Configure Sauce Connect service definition
+  template: src=sc.conf.j2 dest=/etc/init/sc.conf
+  notify:
+    - Restart Sauce Connect
+
+- name: Touch log file if it does not exist
+  command: touch {{ sc_log }}
+           creates={{ sc_log }}
+
+- name: Set log file permissions
+  file: path={{ sc_log }} owner=sc group=sc mode=0644
+
+- name: Configure Sauce Connect log rotation
+  template: src=logrotate_sc.j2 dest=/etc/logrotate.d/sc
