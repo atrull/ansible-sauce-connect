@@ -1,3 +1,0 @@
----
-- name: Restart Sauce Connect
-  service: name=sc state=restarted
